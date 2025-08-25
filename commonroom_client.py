@@ -122,11 +122,16 @@ class CommonRoomClient:
         }
         return sections
     
-    def get_member_url(self, user_id: str) -> str:
+    def get_member_url(self, user_id: str, show_activity: bool = False) -> str:
         """Get URL for individual member page"""
         if not self.dashboard_base_url:
             raise ValueError("COMMONROOM_BASE_URL not configured. Add it to your .env file")
-        return f"{self.dashboard_base_url}/member/{user_id}"
+        base_url = f"{self.dashboard_base_url}/member/{user_id}"
+        return f"{base_url}/activity" if show_activity else base_url
+    
+    def get_member_activity_url(self, user_id: str) -> str:
+        """Get URL for individual member activity page"""
+        return self.get_member_url(user_id, show_activity=True)
     
     def get_organization_url(self, org_id: str) -> str:
         """Get URL for individual organization page"""

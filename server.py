@@ -136,6 +136,26 @@ async def handle_list_tools() -> list[Tool]:
                     "user_id": {
                         "type": "string",
                         "description": "User ID for the member page"
+                    },
+                    "show_activity": {
+                        "type": "boolean",
+                        "description": "If true, returns URL to member's activity page instead of overview",
+                        "default": False
+                    }
+                },
+                "required": ["user_id"],
+                "additionalProperties": False
+            }
+        ),
+        Tool(
+            name="commonroom_get_member_activity_url",
+            description="Get URL for individual Common Room member activity page (more detailed than overview)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "string",
+                        "description": "User ID for the member activity page"
                     }
                 },
                 "required": ["user_id"],
@@ -194,7 +214,10 @@ async def handle_call_tool(name: str, arguments: dict) -> Sequence[TextContent]:
         elif name == "commonroom_get_dashboard_urls":
             result = client.get_dashboard_urls()
         elif name == "commonroom_get_member_url":
-            result = {"url": client.get_member_url(arguments["user_id"])}
+            show_activity = arguments.get("show_activity", False)
+            result = {"url": client.get_member_url(arguments["user_id"], show_activity)}
+        elif name == "commonroom_get_member_activity_url":
+            result = {"url": client.get_member_activity_url(arguments["user_id"])}
         elif name == "commonroom_get_organization_url":
             result = {"url": client.get_organization_url(arguments["org_id"])}
         elif name == "commonroom_get_segment_url":
