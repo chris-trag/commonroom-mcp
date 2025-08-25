@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "commonroom": {
+      "command": "python",
+      "args": ["/path/to/commonroom-mcp/server.py"],
+      "env": {
+        "COMMONROOM_KEY": "${COMMONROOM_KEY}",
+        "COMMONROOM_BASE_URL": "${COMMONROOM_BASE_URL}"
+      }
+    }
+  }
+}
