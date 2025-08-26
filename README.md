@@ -62,7 +62,8 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 q chat --mcp-config ~/.config/amazon-q/mcp-config.json
 ```
 
-**📖 [Complete Installation Guide](INSTALL.md)**
+**📖 [Complete Installation Guide](INSTALL.md)**  
+**🔧 [Detailed Setup Guide](SETUP.md)**
 
 ## Setup
 
@@ -72,15 +73,29 @@ q chat --mcp-config ~/.config/amazon-q/mcp-config.json
    pip install -r requirements.txt
    ```
 
-2. **Configure environment**:
+2. **Get Common Room API Token**:
+   - Go to your Common Room community settings: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/api-tokens`
+   - Click "Create API Token"
+   - Give it a name (e.g., "MCP Server")
+   - Copy the generated token
+   - See [Common Room API Token docs](https://www.commonroom.io/docs/set-preferences/api-tokens/) for details
+
+3. **Find your Destination ID** (for adding activities/users):
+   - Go to Sources settings: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources`
+   - Click on "API" source: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources/api`
+   - Copy the Destination ID number (e.g., `138683`)
+
+4. **Configure environment**:
    ```bash
    cp .env.example .env
-   # Edit .env file with your API credentials:
+   # Edit .env file with your credentials:
    # COMMONROOM_KEY=your_api_token_here
    # COMMONROOM_BASE_URL=https://app.commonroom.io/community/your-community-id
+   # COMMONROOM_DESTINATION_ID=your_destination_id_here
+   # COMMONROOM_SIGNAL_ID=your_signal_id_here (optional)
    ```
 
-3. **Test server**:
+5. **Test server**:
    ```bash
    python server.py
    ```
@@ -128,10 +143,27 @@ What's the URL for Common Room member 226882839?
 
 **Add activity:**
 ```
-Add a blog post activity to Common Room with title "Fire TV Guide" by chris@example.com
+Add a blog post activity to Common Room by chris@trag.dev with title "Fire TV Development Guide"
+Add webinar activity by Sarah Johnson (sarah@startup.com, Twitter: @sarahj, Company: TechCorp) with title "Building Smart TV Apps"
 ```
 
 **📋 [Click here for more examples prompts >> ](EXAMPLES.md)**
+
+## Key Features
+
+### Auto-Generated IDs
+- **No manual ID management** - Server automatically generates unique IDs for activities and users
+- **Format**: `activity_1703123456_a1b2c3d4` and `user_1703123456_e5f6g7h8`
+- **Deduplication** - Common Room handles user merging based on email/social handles
+
+### Flexible User Data
+Provide any combination of user information:
+- Email address (recommended for deduplication)
+- Social handles (Twitter, LinkedIn, GitHub, Discord, Slack)
+- Company details (name, job title)
+- Personal info (full name, location, bio)
+
+**Example**: Just say "Add blog post by john@company.com (Twitter: @johndev)" and the server handles the rest!
 
 ## Tool Details
 
@@ -149,6 +181,7 @@ Add a blog post activity to Common Room with title "Fire TV Guide" by chris@exam
 ## Documentation
 
 - **[INSTALL.md](INSTALL.md)** - Complete installation guide for Claude Code and Amazon Q CLI
+- **[SETUP.md](SETUP.md)** - Detailed credential setup with screenshots and links
 - **[EXAMPLES.md](EXAMPLES.md)** - Sample prompts and queries to test the MCP server
 - **[SPEC.md](SPEC.md)** - Technical specification and requirements
 - **[openapi.json](openapi.json)** - Common Room API specification

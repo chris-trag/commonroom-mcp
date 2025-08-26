@@ -3,8 +3,28 @@
 ## Prerequisites
 
 1. **Python 3.8+** installed
-2. **Common Room API token** - Get from [Common Room Settings → API tokens](https://app.commonroom.io/)
+2. **Common Room API token** - See setup instructions below
 3. **MCP-compatible client** (Claude Code or Amazon Q CLI)
+
+## Getting Common Room Credentials
+
+### 1. Create API Token
+1. Go to your Common Room community settings: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/api-tokens`
+2. Click "Create API Token"
+3. Give it a descriptive name (e.g., "MCP Server")
+4. Copy the generated token immediately (you won't see it again)
+5. See [Common Room API Token docs](https://www.commonroom.io/docs/set-preferences/api-tokens/) for more details
+
+### 2. Find Your Community ID
+Your community ID is in your Common Room URL: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID`
+
+### 3. Get Destination ID (for adding activities/users)
+1. Go to Sources settings: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources`
+2. Click on "API" source: `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources/api`
+3. Copy the Destination ID number (e.g., `138683`)
+
+### 4. Signal ID (Optional)
+Signal IDs are used to categorize activities. You can find or create them in your Common Room settings.
 
 ## Setup
 
@@ -28,6 +48,8 @@ cp .env.example .env
 # Edit .env file with your credentials:
 # COMMONROOM_KEY=your_api_token_here
 # COMMONROOM_BASE_URL=https://app.commonroom.io/community/your-community-id
+# COMMONROOM_DESTINATION_ID=your_destination_id_here
+# COMMONROOM_SIGNAL_ID=your_signal_id_here (optional)
 ```
 
 ### 4. Test Server

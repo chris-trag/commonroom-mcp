@@ -1,7 +1,7 @@
 # Common Room MCP Server Specification
 
 ## Overview
-Unofficial MCP server that exposes Common Room API functionality as tools for AI assistants (Q CLI, Claude Code).
+Unofficial MCP server that exposes Common Room API functionality as tools for AI assistants (Q CLI, Claude Code). Features auto-generated IDs and flexible user data handling for seamless integration.
 
 ## Core Requirements
 
@@ -28,16 +28,36 @@ Unofficial MCP server that exposes Common Room API functionality as tools for AI
 2. **commonroom_get_segments** - List audience segments  
 3. **commonroom_get_tags** - List categorization tags
 4. **commonroom_get_user** - Get user by email (includes dashboard_url)
-5. **commonroom_add_activity** - Create activity record
-6. **commonroom_add_user** - Create/update user record
+5. **commonroom_add_activity** - Create activity record (auto-generates IDs)
+6. **commonroom_add_user** - Create/update user record (auto-generates IDs)
 7. **commonroom_get_dashboard_urls** - Get URLs for all dashboard sections
 8. **commonroom_get_member_url** - Get individual member page URL
 9. **commonroom_get_organization_url** - Get individual organization page URL
 10. **commonroom_get_segment_url** - Get individual segment page URL
 
+### Auto-Generated IDs
+- **Activity IDs**: Format `activity_{timestamp}_{uuid8}` (e.g., `activity_1703123456_a1b2c3d4`)
+- **User IDs**: Format `user_{timestamp}_{uuid8}` (e.g., `user_1703123456_e5f6g7h8`)
+- Ensures uniqueness while remaining human-readable
+- Common Room handles deduplication via email/social handles
+
+### Flexible User Data
+Accepts any combination of user fields:
+- `email` - Email address (recommended for deduplication)
+- `fullName` - Full name
+- `companyName` - Company name  
+- `titleAtCompany` - Job title
+- `twitterUsername` - Twitter/X handle (without @)
+- `linkedinUrl` - LinkedIn profile URL
+- `githubUsername` - GitHub username
+- `discordUsername` - Discord username
+- `slackUserId` - Slack user ID
+- `location` - Geographic location
+- `bio` - User bio/description
+
 ### Data Operations
 - **Read Operations**: Activity types, segments, tags, user lookup (with dashboard URLs)
-- **Write Operations**: Add activities, add/update users
+- **Write Operations**: Add activities, add/update users (with auto-generated IDs)
 - **URL Generation**: Dashboard URLs for members, organizations, segments
 - **Bulk Operations**: Not implemented (use existing bulk_activities.py)
 
@@ -57,18 +77,36 @@ Unofficial MCP server that exposes Common Room API functionality as tools for AI
 ## Technical Architecture
 
 ### Components
-- `server.py` - MCP server implementation
+- `server.py` - MCP server implementation with ID generation
 - `commonroom_client.py` - Common Room API client
 - `openapi.json` - API specification reference
 
 ### Dependencies
 - `mcp` - Model Context Protocol library
 - `requests` - HTTP client for API calls
+- `uuid` - ID generation
+- `time` - Timestamp generation
 
 ### Configuration
 - Environment-based API key management
 - JSON configuration for MCP clients
 - Cross-platform compatibility (macOS focus)
+
+## User Experience Improvements
+
+### Simplified Activity Creation
+Users can now say:
+```
+Add blog post by chris@trag.dev with title "Fire TV Guide"
+Add webinar by Sarah (sarah@company.com, Twitter: @sarahj) with title "Smart TV Development"
+```
+
+Instead of providing complex user objects with IDs.
+
+### Automatic Deduplication
+- Server generates unique IDs for each request
+- Common Room merges users based on email/social handles
+- No need to track or manage user IDs manually
 
 ## Limitations
 

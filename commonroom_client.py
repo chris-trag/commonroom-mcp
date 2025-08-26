@@ -34,6 +34,8 @@ class CommonRoomClient:
         
         self.base_url = "https://api.commonroom.io/community/v1"
         self.dashboard_base_url = os.getenv('COMMONROOM_BASE_URL')
+        self.signal_id = os.getenv('COMMONROOM_SIGNAL_ID')
+        self.destination_id = os.getenv('COMMONROOM_DESTINATION_ID', '138683')
         self.headers = {
             'Authorization': f'Bearer {self.api_key}',
             'Content-Type': 'application/json'
@@ -84,6 +86,17 @@ class CommonRoomClient:
     
     def add_activity(self, destination_source_id: str, activity_data: Dict) -> Dict:
         """Add activity to destination source"""
+        if not destination_source_id:
+            destination_source_id = self.destination_id
+            
+        if not destination_source_id:
+            raise ValueError("destination_source_id required (set COMMONROOM_DESTINATION_ID or pass as parameter)")
+        
+        # Add signal to activity data if configured
+        if self.signal_id and activity_data:
+            activity_data = activity_data.copy()  # Don't modify original
+            activity_data['signal'] = self.signal_id
+        
         url = f"{self.base_url}/source/{destination_source_id}/activity"
         response = requests.post(url, headers=self.headers, json=activity_data)
         response.raise_for_status()
@@ -91,6 +104,12 @@ class CommonRoomClient:
     
     def add_user(self, destination_source_id: str, user_data: Dict) -> Dict:
         """Add user to destination source"""
+        if not destination_source_id:
+            destination_source_id = self.destination_id
+            
+        if not destination_source_id:
+            raise ValueError("destination_source_id required (set COMMONROOM_DESTINATION_ID or pass as parameter)")
+            
         url = f"{self.base_url}/source/{destination_source_id}/user"
         response = requests.post(url, headers=self.headers, json=user_data)
         response.raise_for_status()

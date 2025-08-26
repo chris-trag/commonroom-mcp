@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-08-26
+
+### Added
+- **Auto-generated IDs**: Server now automatically generates unique activity and user IDs
+- **Flexible user data**: Accept any combination of user fields (email, social handles, company info, etc.)
+- **Enhanced user experience**: Simplified activity/user creation with natural language prompts
+- Support for additional user fields:
+  - `twitterUsername` - Twitter/X handle
+  - `linkedinUrl` - LinkedIn profile URL  
+  - `githubUsername` - GitHub username
+  - `discordUsername` - Discord username
+  - `slackUserId` - Slack user ID
+  - `location` - Geographic location
+  - `bio` - User bio/description
+
+### Changed
+- **Breaking**: `commonroom_add_activity` now requires `destination_source_id` parameter
+- **Breaking**: `commonroom_add_user` now requires `destination_source_id` parameter
+- Activity and user IDs are now auto-generated using format `{type}_{timestamp}_{uuid8}`
+- User data structure simplified - no longer requires manual ID management
+- Common Room handles user deduplication based on email/social handles
+
+### Updated
+- Enhanced examples with natural language prompts
+- Updated SPEC.md with auto-generation details
+- Improved README with flexible user data examples
+- Tool schemas updated to reflect new user data structure
+
+### Technical
+- Added `uuid` and `time` imports for ID generation
+- Simplified client methods for activity/user creation
+- Enhanced tool parameter validation
+
 ## [1.1.0] - 2025-08-25
 
 ### Added
