@@ -77,34 +77,10 @@ async def handle_list_tools() -> list[Tool]:
                     "activity": {
                         "type": "object",
                         "description": "Activity data including activityType, user info, title, content, url, timestamp",
-                        "properties": {
-                            "activityType": {"type": "string", "description": "Type of activity (article, webinar, etc.)"},
-                            "user": {
-                                "type": "object", 
-                                "description": "User information - provide any combination of email, social handles, name, company, etc.",
-                                "properties": {
-                                    "email": {"type": "string", "description": "User email address"},
-                                    "fullName": {"type": "string", "description": "User's full name"},
-                                    "companyName": {"type": "string", "description": "User's company"},
-                                    "titleAtCompany": {"type": "string", "description": "User's job title"},
-                                    "twitterUsername": {"type": "string", "description": "Twitter/X username (without @)"},
-                                    "linkedinUrl": {"type": "string", "description": "LinkedIn profile URL"},
-                                    "githubUsername": {"type": "string", "description": "GitHub username"},
-                                    "discordUsername": {"type": "string", "description": "Discord username"},
-                                    "slackUserId": {"type": "string", "description": "Slack user ID"},
-                                    "location": {"type": "string", "description": "User location"},
-                                    "bio": {"type": "string", "description": "User bio/description"}
-                                }
-                            },
-                            "activityTitle": {"type": "object", "description": "Activity title"},
-                            "content": {"type": "object", "description": "Activity content/description"},
-                            "url": {"type": "string", "description": "URL to the activity"},
-                            "timestamp": {"type": "string", "description": "ISO 8601 timestamp"}
-                        },
-                        "required": ["activityType", "user"]
+                        "additionalProperties": True
                     }
                 },
-                "required": ["destination_source_id", "activity"],
+                "required": ["activity"],
                 "additionalProperties": False
             }
         ),
@@ -136,7 +112,7 @@ async def handle_list_tools() -> list[Tool]:
                         }
                     }
                 },
-                "required": ["destination_source_id", "user"],
+                "required": ["user"],
                 "additionalProperties": False
             }
         ),
@@ -230,6 +206,7 @@ async def handle_call_tool(name: str, arguments: dict) -> Sequence[TextContent]:
         elif name == "commonroom_get_user":
             result = client.get_user_by_email(arguments["email"])
         elif name == "commonroom_add_activity":
+            print(f"DEBUG: add_activity called with arguments: {arguments}", file=sys.stderr)
             # Auto-generate activity ID and user ID
             activity_data = arguments["activity"].copy()
             activity_data["id"] = f"activity_{int(time.time())}_{str(uuid.uuid4())[:8]}"
@@ -239,13 +216,14 @@ async def handle_call_tool(name: str, arguments: dict) -> Sequence[TextContent]:
             user_data["id"] = f"user_{int(time.time())}_{str(uuid.uuid4())[:8]}"
             activity_data["user"] = user_data
             
-            result = client.add_activity(arguments["destination_source_id"], activity_data)
+            print(f"DEBUG: Generated activity data: {activity_data}", file=sys.stderr)
+            result = client.add_activity(arguments.get("destination_source_id"), activity_data)
         elif name == "commonroom_add_user":
             # Auto-generate user ID
             user_data = arguments["user"].copy()
             user_data["id"] = f"user_{int(time.time())}_{str(uuid.uuid4())[:8]}"
             
-            result = client.add_user(arguments["destination_source_id"], user_data)
+            result = client.add_user(arguments.get("destination_source_id"), user_data)
         elif name == "commonroom_get_dashboard_urls":
             result = client.get_dashboard_urls()
         elif name == "commonroom_get_member_url":
