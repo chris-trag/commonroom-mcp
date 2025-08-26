@@ -40,7 +40,7 @@ When you ask Q CLI or Claude Code to "get Common Room activity types", it:
 
 1. **Clone/download this repository**
 2. **Install dependencies**: `pip install -r requirements.txt`
-3. **Create API Signal**: Go to https://app.commonroom.io/community/8683-amazon-developer/settings/sources/api to create an API signal and get your `destinationSourceId` (see [Common Room docs](https://www.commonroom.io/docs/signals/custom-integrations/zapier-api/#create-an-api-signal))
+3. **Create API Signal**: Go to `https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources/api` to create an API signal and get your `destinationSourceId` (see [Common Room docs](https://www.commonroom.io/docs/signals/custom-integrations/zapier-api/#create-an-api-signal))
 4. **Configure environment**: Copy `.env.example` to `.env` and add your API key and destination ID
 5. **Configure MCP client** (see [INSTALL.md](INSTALL.md) for detailed instructions)
 
