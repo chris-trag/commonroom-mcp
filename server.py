@@ -32,6 +32,15 @@ async def handle_list_tools() -> list[Tool]:
             }
         ),
         Tool(
+            name="commonroom_get_api_sources_url",
+            description="Get URL for Common Room API sources configuration page",
+            inputSchema={
+                "type": "object", 
+                "properties": {},
+                "additionalProperties": False
+            }
+        ),
+        Tool(
             name="commonroom_get_segments", 
             description="Get all Common Room audience segments for targeting and analysis",
             inputSchema={
@@ -224,6 +233,8 @@ async def handle_call_tool(name: str, arguments: dict) -> Sequence[TextContent]:
             user_data["id"] = f"user_{int(time.time())}_{str(uuid.uuid4())[:8]}"
             
             result = client.add_user(arguments.get("destination_source_id"), user_data)
+        elif name == "commonroom_get_api_sources_url":
+            result = {"url": client.get_api_sources_url()}
         elif name == "commonroom_get_dashboard_urls":
             result = client.get_dashboard_urls()
         elif name == "commonroom_get_member_url":
