@@ -47,6 +47,18 @@ class CommonRoomClient:
             return "https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources/api"
         return f"{self.dashboard_base_url}/settings/sources/api"
     
+    def get_api_tokens_url(self) -> str:
+        """Get the API tokens configuration URL for this community"""
+        if not self.dashboard_base_url:
+            return "https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/api-tokens"
+        return f"{self.dashboard_base_url}/settings/api-tokens"
+    
+    def get_sources_url(self) -> str:
+        """Get the sources configuration URL for this community"""
+        if not self.dashboard_base_url:
+            return "https://app.commonroom.io/community/YOUR-COMMUNITY-ID/settings/sources"
+        return f"{self.dashboard_base_url}/settings/sources"
+    
     def get_token_status(self) -> Dict:
         """Get API token status"""
         response = requests.get(f"{self.base_url}/api-token-status", headers=self.headers)
